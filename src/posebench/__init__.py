@@ -18,6 +18,7 @@ def parse_args():
     parser.add_argument("--method", required=False, type=str)
     parser.add_argument("--dataset", required=False, type=str)
     parser.add_argument("--subsample", required=False, type=int)
+    parser.add_argument("--subset", required=False, action='store_true')
     args = parser.parse_args()
     force_opt = {}
     if args.min_iterations is not None:
@@ -33,23 +34,27 @@ def parse_args():
     dataset_filter = []
     if args.dataset is not None:
         dataset_filter = args.dataset.split(",")
-    return force_opt, method_filter, dataset_filter, args.subsample
+    return force_opt, method_filter, dataset_filter, args.subsample, args.subset
 
 
 
 
 def main():
+    force_opt, method_filter, dataset_filter, subsample, subset = parse_args()
     if not Path("data").is_dir():
-        if not Path("data.zip").is_file():
+        if subset:
+            data_zipfile_name = "data-subsampled-10.zip"
+        else:
+            data_zipfile_name = "data.zip"
+        if not Path(data_zipfile_name).is_file():
             download_file_with_progress(
-                "https://github.com/Parskatt/storage/releases/download/posebench-v0.0.1/data.zip",
-                "data.zip",
+                f"https://github.com/Parskatt/storage/releases/download/posebench-v0.0.1/{data_zipfile_name}",
+                data_zipfile_name,
             )
         print("Extracting data...")
-        with zipfile.ZipFile("data.zip", "r") as zip_ref:
+        with zipfile.ZipFile(data_zipfile_name, "r") as zip_ref:
             zip_ref.extractall(".")
-        os.remove("data.zip")
-    force_opt, method_filter, dataset_filter, subsample = parse_args()
+        os.remove(data_zipfile_name)
     problems = {
         "absolute pose": posebench.absolute_pose.main,
         "relative pose": posebench.relative_pose.main,
