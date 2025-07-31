@@ -59,3 +59,5 @@ wget -N http://vision.maths.lth.se/viktor/posebench/homography/barath_Alamo.h5
 wget -N http://vision.maths.lth.se/viktor/posebench/homography/barath_NYC_Library.h5
 
 cd ../..
+
+
