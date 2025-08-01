@@ -4,6 +4,13 @@ import requests
 from tqdm import tqdm
 
 
+def trapezoid(y, x=None, dx=1.0, axis=-1):
+    if np.__version__ < "2.0.0":
+        return np.trapz(y, x=x, dx=dx, axis=axis)
+    else:
+        return np.trapezoid(y, x=x, dx=dx, axis=axis)
+
+
 def substr_in_list(s, lst):
     return np.any([s.find(t) >= 0 for t in lst])
 
@@ -65,7 +72,7 @@ def compute_auc(errors, thresholds):
         last_index = np.searchsorted(errors, t)
         r = np.r_[recall[:last_index], recall[last_index - 1]]
         e = np.r_[errors[:last_index], t]
-        aucs.append(np.trapezoid(r, x=e) / t)
+        aucs.append(trapezoid(r, x=e) / t)
     return aucs
 
 
