@@ -55,7 +55,7 @@ def eval_essential_estimator(instance, estimator="poselib"):
     elif estimator == "pycolmap":
         opt = poselib_opt_to_pycolmap_opt(opt)
         tt1 = datetime.datetime.now()
-        result = pycolmap.essential_matrix_estimation(
+        result = pycolmap.estimate_essential_matrix(
             instance["x1"], instance["x2"], instance["cam1"], instance["cam2"], opt
         )
         tt2 = datetime.datetime.now()
@@ -80,6 +80,8 @@ def eval_essential_refinement(instance):
     x2 = instance["x2"]
     cam1 = instance["cam1"]
     cam2 = instance["cam2"]
+    K1 = camera_dict_to_calib_matrix(cam1)
+    K2 = camera_dict_to_calib_matrix(cam2)
 
     R_gt = instance["R"]
     t_gt = instance["t"]
@@ -117,7 +119,7 @@ def eval_fundamental_estimator(instance, estimator="poselib"):
     elif estimator == "pycolmap":
         opt = poselib_opt_to_pycolmap_opt(opt)
         tt1 = datetime.datetime.now()
-        result = pycolmap.fundamental_matrix_estimation(
+        result = pycolmap.estimate_fundamental_matrix(
             instance["x1"], instance["x2"], opt
         )
         tt2 = datetime.datetime.now()
@@ -129,8 +131,6 @@ def eval_fundamental_estimator(instance, estimator="poselib"):
     else:
         raise Exception("nyi")
 
-    R_gt = instance["R"]
-    t_gt = instance["t"]
     K1 = camera_dict_to_calib_matrix(instance["cam1"])
     K2 = camera_dict_to_calib_matrix(instance["cam2"])
     if np.sum(inl) < 5:

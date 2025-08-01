@@ -37,7 +37,6 @@ def compute_metrics(results, thresholds=[5.0, 10.0, 20.0]):
 
 def eval_homography_estimator(instance, estimator="poselib"):
     opt = instance["opt"]
-    threshold = instance["threshold"]
 
     if estimator == "poselib":
         tt1 = datetime.datetime.now()
@@ -46,7 +45,7 @@ def eval_homography_estimator(instance, estimator="poselib"):
     elif estimator == "pycolmap":
         opt = poselib_opt_to_pycolmap_opt(opt)
         tt1 = datetime.datetime.now()
-        result = pycolmap.homography_matrix_estimation(
+        result = pycolmap.estimate_homography_matrix(
             instance["x1"], instance["x2"], opt
         )
         tt2 = datetime.datetime.now()

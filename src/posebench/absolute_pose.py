@@ -64,7 +64,7 @@ def eval_pnp_estimator(instance, estimator="poselib_pnp"):
     elif estimator == "pycolmap":
         opt = poselib_opt_to_pycolmap_opt(opt)
         tt1 = datetime.datetime.now()
-        result = pycolmap.absolute_pose_estimation(
+        result = pycolmap.estimate_and_refine_absolute_pose(
             instance["p2d"],
             instance["p3d"],
             instance["cam"],
