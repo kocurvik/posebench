@@ -158,11 +158,11 @@ def main(dataset_path='data/relative', force_opt = {}, dataset_filter=[], method
         datasets = [(n,t) for (n,t) in datasets if substr_in_list(n,dataset_filter)]
 
     evaluators = {
-        'E (poselib)': lambda i: eval_essential_estimator(i, estimator='poselib'),
-        'E (COLMAP)': lambda i: eval_essential_estimator(i, estimator='pycolmap'),
+        # 'E (poselib)': lambda i: eval_essential_estimator(i, estimator='poselib'),
+        # 'E (COLMAP)': lambda i: eval_essential_estimator(i, estimator='pycolmap'),
         'F (poselib)': lambda i: eval_fundamental_estimator(i, estimator='poselib'),
-        'F+RFC (poselib)': lambda i: eval_fundamental_estimator(i, estimator='poselib_rfc'),
-        'F (COLMAP)': lambda i: eval_fundamental_estimator(i, estimator='pycolmap'),
+        # 'F+RFC (poselib)': lambda i: eval_fundamental_estimator(i, estimator='poselib_rfc'),
+        # 'F (COLMAP)': lambda i: eval_fundamental_estimator(i, estimator='pycolmap'),
     }
     if len(method_filter) > 0:
         evaluators = {k:v for (k,v) in evaluators.items() if substr_in_list(k,method_filter)}
