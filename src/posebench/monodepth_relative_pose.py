@@ -77,15 +77,15 @@ def eval_essential_estimator(instance, estimator="poselib"):
 
 def eval_calib_monodepth_estimator(instance, estimate_shift=False):
     opt = instance["opt"]
-    opt['estimate_shift'] = estimate_shift
+    opt['monodepth_estimate_shift'] = estimate_shift
 
     tt1 = datetime.datetime.now()
-    pose, info = poselib.estimate_monodepth_pose(
+    monodepth_geometry, info = poselib.estimate_monodepth_relative_pose(
         instance["x1"], instance["x2"], instance['depth1'], instance['depth2'], instance["cam1"], instance["cam2"],
         opt, {}
     )
     tt2 = datetime.datetime.now()
-    (R, t) = (pose.R, pose.t)
+    (R, t) = (monodepth_geometry.pose.R, monodepth_geometry.pose.t)
 
     err_R = rotation_angle(instance["R"] @ R.T)
     err_t = angle(instance["t"], t)
@@ -160,11 +160,11 @@ def eval_shared_focal_monodepth_estimator(instance):
     pp2 = instance["K2"][:2, 2]
 
     tt1 = datetime.datetime.now()
-    image_pair, info = poselib.estimate_monodepth_shared_focal_pose(
+    image_pair, info = poselib.estimate_monodepth_shared_focal_relative_pose(
         instance["x1"] - pp1, instance["x2"] - pp2, instance['depth1'], instance['depth2'], opt, {}
     )
     tt2 = datetime.datetime.now()
-    pose = image_pair.pose
+    pose = image_pair.geometry.pose
     (R, t) = (pose.R, pose.t)
 
     err_R = rotation_angle(instance["R"] @ R.T)
@@ -179,11 +179,11 @@ def eval_varying_focal_monodepth_estimator(instance):
     pp2 = instance["K2"][:2, 2]
 
     tt1 = datetime.datetime.now()
-    image_pair, info = poselib.estimate_monodepth_varying_focal_pose(
+    image_pair, info = poselib.estimate_monodepth_varying_focal_relative_pose(
         instance["x1"] - pp1, instance["x2"] - pp2, instance['depth1'], instance['depth2'], opt, {}
     )
     tt2 = datetime.datetime.now()
-    pose = image_pair.pose
+    pose = image_pair.geometry.pose
     (R, t) = (pose.R, pose.t)
 
     err_R = rotation_angle(instance["R"] @ R.T)
